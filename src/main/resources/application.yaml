@@ -1,0 +1,33 @@
+logging:
+  level:
+    jp:
+      cloudnativedays:
+        social:
+          analysis: INFO
+    com:
+      slack:
+        api: INFO
+
+sentiment:
+  file: data/pn.csv.m3.120408.trim
+
+twitter:
+  enabled: true
+  query: "#o11y2022"
+  interval: 180000
+
+slack:
+  enabled: false
+
+wavefront:
+  application:
+    name: social-analyzer
+    service: social-analyzer
+management:
+  endpoint:
+    prometheus:
+      enabled: true
+  endpoints:
+    web:
+      exposure:
+        include: info,health,prometheus
