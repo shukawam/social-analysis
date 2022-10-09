@@ -12,10 +12,8 @@ public class MorphologicalAnalysis {
 
 	public List<Token> getToken(String in) {
 		Tokenizer tokenizer = new Tokenizer();
-		List<String> tokens = tokenizer.tokenize(in).stream().map(token -> token.getPartOfSpeechLevel1())
+		return tokenizer.tokenize(in).stream().filter(token -> "名詞".equals(token.getPartOfSpeechLevel1()))
 				.collect(Collectors.toList());
-		tokens.forEach(token -> System.out.println(token));
-		return tokenizer.tokenize(in);
 	}
 
 }
