@@ -28,6 +28,9 @@ public class TwitterMetrics {
 
 	private final Map<String, Integer> favoriteGaugeCache = new HashMap<>();
 
+	private final Map<String, Long> wordCountCache = new HashMap<>();
+
+
 	public TwitterMetrics(MeterRegistry meterRegistry) {
 		this.meterRegistry = meterRegistry;
 	}
@@ -78,4 +81,10 @@ public class TwitterMetrics {
 		meterRegistry.gauge(METRICS_PREFIX + "query.time.msec", i);
 	}
 
+	public void setWordCounts(Map<String, Long> wordCounts) {
+		wordCounts.forEach((k, v) -> {
+			meterRegistry.gauge(METRICS_PREFIX + "wordcount",
+					Tags.of(Tag.of("word", k)), v);
+		});
+	}
 }

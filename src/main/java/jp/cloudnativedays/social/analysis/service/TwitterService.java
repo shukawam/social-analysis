@@ -70,7 +70,7 @@ public class TwitterService {
 						if (status.getLang().equals("ja")) {
 							logger.debug("Sentiment Check on tweet : " + tweetTxt);
 							tweetData.setSentimentScore(sentiment.getSentimentScoreFromSentence(tweetTxt));
-							wordCount.getWordCountResult(tweetTxt);
+							twitterMetrics.setWordCounts(wordCount.getWordCountResult(tweetTxt));
 						}
 					}
 					twitterMetrics.setMetrics(tweetData);
