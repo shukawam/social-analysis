@@ -40,6 +40,9 @@ class TwitterServiceTest {
 
 	private final ClassLoader classLoader = getClass().getClassLoader();
 
+	@Mock
+	private WordCount wordCount;
+
 	private final File sentiFile = new File(
 			Objects.requireNonNull(classLoader.getResource("data/test-data.trim")).getFile());
 
@@ -51,7 +54,7 @@ class TwitterServiceTest {
 		Sentiment sentiment = new Sentiment(sentimentLoader, morphologicalAnalysis);
 		String[] queryStrings = new String[] { "dummy" };
 
-		twitterService = new TwitterService(sentiment, twitterMetrics, twitterClient, queryStrings);
+		twitterService = new TwitterService(sentiment, twitterMetrics, twitterClient, queryStrings, wordCount);
 	}
 
 	@Test
@@ -190,7 +193,7 @@ class TwitterServiceTest {
 		Sentiment sentiment = new Sentiment(sentimentLoader, morphologicalAnalysis);
 		String[] queryStrings = new String[] { "dummy", "dummy2" };
 
-		twitterService = new TwitterService(sentiment, twitterMetrics, twitterClient, queryStrings);
+		twitterService = new TwitterService(sentiment, twitterMetrics, twitterClient, queryStrings, wordCount);
 
 		Query dummyQuery1 = new Query("dummy" + " -filter:retweets");
 		Query dummyQuery2 = new Query("dummy2" + " -filter:retweets");

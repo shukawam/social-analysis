@@ -26,12 +26,15 @@ public class TwitterService {
 
 	private final TwitterClient twitterClient;
 
+	private final WordCount wordCount;
+
 	public TwitterService(Sentiment sentiment, TwitterMetrics twitterMetrics, TwitterClient twitterClient,
-			@Value("${twitter.query}") String[] queryStrings) {
+			@Value("${twitter.query}") String[] queryStrings, WordCount wordCount) {
 		this.sentiment = sentiment;
 		this.twitterMetrics = twitterMetrics;
 		this.twitterClient = twitterClient;
 		this.queryStrings = queryStrings;
+		this.wordCount = wordCount;
 	}
 
 	@NewSpan
@@ -67,6 +70,7 @@ public class TwitterService {
 						if (status.getLang().equals("ja")) {
 							logger.debug("Sentiment Check on tweet : " + tweetTxt);
 							tweetData.setSentimentScore(sentiment.getSentimentScoreFromSentence(tweetTxt));
+							wordCount.getWordCountResult(tweetTxt);
 						}
 					}
 					twitterMetrics.setMetrics(tweetData);
