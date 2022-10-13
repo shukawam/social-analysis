@@ -67,10 +67,10 @@ public class TwitterService {
 
 					if (!status.isRetweet() && !twitterMetrics.isSentimentSet(tweetData)) {
 						String tweetTxt = status.getText();
+						tweetData.setWordCount(wordCount.getWordCountResultMap(tweetTxt));
 						if (status.getLang().equals("ja")) {
 							logger.debug("Sentiment Check on tweet : " + tweetTxt);
 							tweetData.setSentimentScore(sentiment.getSentimentScoreFromSentence(tweetTxt));
-							twitterMetrics.setWordCounts(wordCount.getWordCountResult(tweetTxt));
 						}
 					}
 					twitterMetrics.setMetrics(tweetData);

@@ -28,8 +28,6 @@ public class TwitterMetrics {
 
 	private final Map<String, Integer> favoriteGaugeCache = new HashMap<>();
 
-	private final Map<String, Long> wordCountCache = new HashMap<>();
-
 	public TwitterMetrics(MeterRegistry meterRegistry) {
 		this.meterRegistry = meterRegistry;
 	}
@@ -38,9 +36,10 @@ public class TwitterMetrics {
 		setSentimentMetrics(tweetData);
 		setRetweetCounts(tweetData);
 		setFavoriteCounts(tweetData);
+		setWordCounts(tweetData);
 	}
 
-	public void setSentimentMetrics(TweetData tweetData) {
+	private void setSentimentMetrics(TweetData tweetData) {
 		if (!isSentimentSet(tweetData)) {
 			sentimentGaugeCache.put(tweetData.getTweetId(), tweetData.getSentimentScore());
 			meterRegistry.gauge(METRICS_PREFIX + "sentiment",
@@ -60,7 +59,7 @@ public class TwitterMetrics {
 		return true;
 	}
 
-	public void setRetweetCounts(TweetData tweetData) {
+	private void setRetweetCounts(TweetData tweetData) {
 		retweetGaugeCache.put(tweetData.getTweetId(), tweetData.getRetweetCount());
 		meterRegistry.gauge(METRICS_PREFIX + "retweets",
 				Tags.of(Tag.of(QUERY_STRING, tweetData.getQueryString()), Tag.of(TWEET_ID, tweetData.getTweetId()),
@@ -68,7 +67,7 @@ public class TwitterMetrics {
 				retweetGaugeCache, g -> g.get(tweetData.getTweetId()));
 	}
 
-	public void setFavoriteCounts(TweetData tweetData) {
+	private void setFavoriteCounts(TweetData tweetData) {
 		favoriteGaugeCache.put(tweetData.getTweetId(), tweetData.getFavoriteCount());
 		meterRegistry.gauge(METRICS_PREFIX + "favorites",
 				Tags.of(Tag.of(QUERY_STRING, tweetData.getQueryString()), Tag.of(TWEET_ID, tweetData.getTweetId()),
@@ -80,9 +79,9 @@ public class TwitterMetrics {
 		meterRegistry.gauge(METRICS_PREFIX + "query.time.msec", i);
 	}
 
-	public void setWordCounts(Map<String, Long> wordCounts) {
-		wordCounts.forEach((k, v) -> {
-			meterRegistry.gauge(METRICS_PREFIX + "wordcount", Tags.of(Tag.of("word", k)), v);
+	private void setWordCounts(TweetData tweetData) {
+		tweetData.getWordCount().forEach((k, v) -> {
+			meterRegistry.gauge(METRICS_PREFIX + "wordCount", Tags.of(Tag.of("word", k)), v);
 		});
 	}
 
